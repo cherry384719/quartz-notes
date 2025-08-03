@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+      <title>Quartz 4</title>
+      <link>https://quartz.jzhao.xyz</link>
+      <description>Last 10 notes on Quartz 4</description>
+      <generator>Quartz -- quartz.jzhao.xyz</generator>
+      <item>
+    <title>测试pdf显示和下载效果</title>
+    <link>https://quartz.jzhao.xyz/%E6%B5%8B%E8%AF%95pdf%E6%98%BE%E7%A4%BA%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%95%88%E6%9E%9C</link>
+    <guid>https://quartz.jzhao.xyz/%E6%B5%8B%E8%AF%95pdf%E6%98%BE%E7%A4%BA%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%95%88%E6%9E%9C</guid>
+    <description><![CDATA[  显示图片： 显示下载链接：点击查看 PDF . ]]></description>
+    <pubDate>Sun, 03 Aug 2025 07:00:58 GMT</pubDate>
+  </item><item>
+    <title>index</title>
+    <link>https://quartz.jzhao.xyz/</link>
+    <guid>https://quartz.jzhao.xyz/</guid>
+    <description><![CDATA[  本笔记网站由github开源项目quartz搭建，部署于github pages上，仓库地址为：quartz-notes 目录： 1. program 闭包 异步编程 异步编程——补充 JavaScript . ]]></description>
+    <pubDate>Sat, 02 Aug 2025 04:51:19 GMT</pubDate>
+  </item><item>
+    <title>JavaScript</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript</guid>
+    <description><![CDATA[ 1.基础数据结构 Number String Object Transclude of 闭包#基础示例. ]]></description>
+    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
+  </item><item>
+    <title>异步编程</title>
+    <link>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B</guid>
+    <description><![CDATA[ JavaScript 异步编程深度解析：从事件循环到现代并发模型 补充内容点击此链接跳转 第一部分：单线程的困境与并发模型 1.1 同步与异步执行：核心冲突 从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。 同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听... ]]></description>
+    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
+  </item><item>
+    <title>异步编程——补充</title>
+    <link>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85</link>
+    <guid>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85</guid>
+    <description><![CDATA[ JavaScript异步编程详解 - 定时器与Promise 什么是异步编程 同步 vs 异步 JavaScript是单线程语言，但通过异步编程可以处理耗时操作而不阻塞主线程。 // 同步代码 - 阻塞执行 console.log(&#039;1&#039;); console.log(&#039;2&#039;); console.log(&#039;3&#039;); // 输出: 1, 2, 3 (按顺序) // 异步代码 - 非阻塞执行 console.log(&#039;1&#039;); setTimeout(() =&gt; console.log(&#039;2&#039;),... ]]></description>
+    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
+  </item><item>
+    <title>闭包</title>
+    <link>https://quartz.jzhao.xyz/01-program/%E9%97%AD%E5%8C%85</link>
+    <guid>https://quartz.jzhao.xyz/01-program/%E9%97%AD%E5%8C%85</guid>
+    <description><![CDATA[ JavaScript 闭包详解笔记 什么是闭包？ 闭包（Closure）是JavaScript中一个重要且强大的概念。简单来说，闭包是指一个函数能够访问并操作其外部作用域中的变量，即使在其外部函数已经执行完毕之后。 核心特点 函数嵌套：内部函数引用外部函数的变量 变量持久化：外部函数执行完毕后，被引用的变量仍然存在 作用域链：内部函数可以访问外部函数的作用域 基础示例 示例1：最简单的闭包 function outerFunction(x) { // 这是外部函数的变量 let outerVariable = x; // 内部函数 function innerFunction(y) { // ... ]]></description>
+    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
+  </item>
+    </channel>
+  </rss>

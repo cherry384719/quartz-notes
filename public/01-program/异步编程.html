@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en"><head><title>异步编程</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;family=IBM Plex Mono:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="Quartz 4"/><meta property="og:title" content="异步编程"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="异步编程"/><meta name="twitter:description" content="JavaScript 异步编程深度解析：从事件循环到现代并发模型 补充内容点击此链接跳转 第一部分：单线程的困境与并发模型 1.1 同步与异步执行：核心冲突 从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。 同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听..."/><meta property="og:description" content="JavaScript 异步编程深度解析：从事件循环到现代并发模型 补充内容点击此链接跳转 第一部分：单线程的困境与并发模型 1.1 同步与异步执行：核心冲突 从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。 同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听..."/><meta property="og:image:alt" content="JavaScript 异步编程深度解析：从事件循环到现代并发模型 补充内容点击此链接跳转 第一部分：单线程的困境与并发模型 1.1 同步与异步执行：核心冲突 从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。 同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听..."/><meta property="og:image" content="https://quartz.jzhao.xyz/static/og-image.png"/><meta property="og:image:url" content="https://quartz.jzhao.xyz/static/og-image.png"/><meta name="twitter:image" content="https://quartz.jzhao.xyz/static/og-image.png"/><meta property="og:image:type" content="image/.png"/><meta property="twitter:domain" content="quartz.jzhao.xyz"/><meta property="og:url" content="https://quartz.jzhao.xyz/01-program/异步编程"/><meta property="twitter:url" content="https://quartz.jzhao.xyz/01-program/异步编程"/><link rel="icon" href="../static/icon.png"/><meta name="description" content="JavaScript 异步编程深度解析：从事件循环到现代并发模型 补充内容点击此链接跳转 第一部分：单线程的困境与并发模型 1.1 同步与异步执行：核心冲突 从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。 同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听..."/><meta name="generator" content="Quartz"/><link href="../index.css" rel="stylesheet" type="text/css" spa-preserve/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  padding: 2rem;
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL1VzZXJzL3N6bi9EZXNrdG9wL09ic2lkaWFuX015X05vdGVzL3F1YXJ0ei1ub3Rlcy9xdWFydHovY29tcG9uZW50cy9zdHlsZXMiLCJzb3VyY2VzIjpbIm1lcm1haWQuaW5saW5lLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFO0VBQ0E7O0FBR0Y7RUFDRTtFQUNBOztBQUdGO0VBQ0U7OztBQUtGO0VBQ0U7RUFDQTs7O0FBSUo7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7O0FBR0Y7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTs7QUFHRjtFQUNFO0VBQ0E7O0FBSUo7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUVBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFOztBQUdGO0VBQ0U7O0FBSUY7RUFDRTtFQUNBO0VBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyIuZXhwYW5kLWJ1dHRvbiB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxvYXQ6IHJpZ2h0O1xuICBwYWRkaW5nOiAwLjRyZW07XG4gIG1hcmdpbjogMC4zcmVtO1xuICByaWdodDogMDsgLy8gTk9URTogcmlnaHQgd2lsbCBiZSBzZXQgaW4gbWVybWFpZC5pbmxpbmUudHNcbiAgY29sb3I6IHZhcigtLWdyYXkpO1xuICBib3JkZXItY29sb3I6IHZhcigtLWRhcmspO1xuICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1saWdodCk7XG4gIGJvcmRlcjogMXB4IHNvbGlkO1xuICBib3JkZXItcmFkaXVzOiA1cHg7XG4gIG9wYWNpdHk6IDA7XG4gIHRyYW5zaXRpb246IDAuMnM7XG5cbiAgJiA+IHN2ZyB7XG4gICAgZmlsbDogdmFyKC0tbGlnaHQpO1xuICAgIGZpbHRlcjogY29udHJhc3QoMC4zKTtcbiAgfVxuXG4gICY6aG92ZXIge1xuICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICBib3JkZXItY29sb3I6IHZhcigtLXNlY29uZGFyeSk7XG4gIH1cblxuICAmOmZvY3VzIHtcbiAgICBvdXRsaW5lOiAwO1xuICB9XG59XG5cbnByZSB7XG4gICY6aG92ZXIgPiAuZXhwYW5kLWJ1dHRvbiB7XG4gICAgb3BhY2l0eTogMTtcbiAgICB0cmFuc2l0aW9uOiAwLjJzO1xuICB9XG59XG5cbiNtZXJtYWlkLWNvbnRhaW5lciB7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgY29udGFpbjogbGF5b3V0O1xuICB6LWluZGV4OiA5OTk7XG4gIGxlZnQ6IDA7XG4gIHRvcDogMDtcbiAgd2lkdGg6IDEwMHZ3O1xuICBoZWlnaHQ6IDEwMHZoO1xuICBvdmVyZmxvdzogaGlkZGVuO1xuICBkaXNwbGF5OiBub25lO1xuICBiYWNrZHJvcC1maWx0ZXI6IGJsdXIoNHB4KTtcbiAgYmFja2dyb3VuZDogcmdiYSgwLCAwLCAwLCAwLjUpO1xuXG4gICYuYWN0aXZlIHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gIH1cblxuICAmID4gI21lcm1haWQtc3BhY2Uge1xuICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0tbGlnaHQpO1xuICAgIGJvcmRlci1yYWRpdXM6IDVweDtcbiAgICBwb3NpdGlvbjogZml4ZWQ7XG4gICAgdG9wOiA1MCU7XG4gICAgbGVmdDogNTAlO1xuICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlKC01MCUsIC01MCUpO1xuICAgIGhlaWdodDogODB2aDtcbiAgICB3aWR0aDogODB2dztcbiAgICBvdmVyZmxvdzogaGlkZGVuO1xuXG4gICAgJiA+IC5tZXJtYWlkLWNvbnRlbnQge1xuICAgICAgcGFkZGluZzogMnJlbTtcbiAgICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgICAgIHRyYW5zZm9ybS1vcmlnaW46IDAgMDtcbiAgICAgIHRyYW5zaXRpb246IHRyYW5zZm9ybSAwLjFzIGVhc2U7XG4gICAgICBvdmVyZmxvdzogdmlzaWJsZTtcbiAgICAgIG1pbi1oZWlnaHQ6IDIwMHB4O1xuICAgICAgbWluLXdpZHRoOiAyMDBweDtcblxuICAgICAgcHJlIHtcbiAgICAgICAgbWFyZ2luOiAwO1xuICAgICAgICBib3JkZXI6IG5vbmU7XG4gICAgICB9XG5cbiAgICAgIHN2ZyB7XG4gICAgICAgIG1heC13aWR0aDogbm9uZTtcbiAgICAgICAgaGVpZ2h0OiBhdXRvO1xuICAgICAgfVxuICAgIH1cblxuICAgICYgPiAubWVybWFpZC1jb250cm9scyB7XG4gICAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gICAgICBib3R0b206IDIwcHg7XG4gICAgICByaWdodDogMjBweDtcbiAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICBnYXA6IDhweDtcbiAgICAgIHBhZGRpbmc6IDhweDtcbiAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0KTtcbiAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICBib3JkZXItcmFkaXVzOiA2cHg7XG4gICAgICBib3gtc2hhZG93OiAwIDJweCA0cHggcmdiYSgwLCAwLCAwLCAwLjEpO1xuICAgICAgei1pbmRleDogMjtcblxuICAgICAgLm1lcm1haWQtY29udHJvbC1idXR0b24ge1xuICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICBhbGlnbi1pdGVtczogY2VudGVyO1xuICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbiAgICAgICAgd2lkdGg6IDMycHg7XG4gICAgICAgIGhlaWdodDogMzJweDtcbiAgICAgICAgcGFkZGluZzogMDtcbiAgICAgICAgYm9yZGVyOiAxcHggc29saWQgdmFyKC0tbGlnaHRncmF5KTtcbiAgICAgICAgYmFja2dyb3VuZDogdmFyKC0tbGlnaHQpO1xuICAgICAgICBjb2xvcjogdmFyKC0tZGFyayk7XG4gICAgICAgIGJvcmRlci1yYWRpdXM6IDRweDtcbiAgICAgICAgY3Vyc29yOiBwb2ludGVyO1xuICAgICAgICBmb250LXNpemU6IDE2cHg7XG4gICAgICAgIGZvbnQtZmFtaWx5OiB2YXIoLS1ib2R5Rm9udCk7XG4gICAgICAgIHRyYW5zaXRpb246IGFsbCAwLjJzIGVhc2U7XG5cbiAgICAgICAgJjpob3ZlciB7XG4gICAgICAgICAgYmFja2dyb3VuZDogdmFyKC0tbGlnaHRncmF5KTtcbiAgICAgICAgfVxuXG4gICAgICAgICY6YWN0aXZlIHtcbiAgICAgICAgICB0cmFuc2Zvcm06IHRyYW5zbGF0ZVkoMXB4KTtcbiAgICAgICAgfVxuXG4gICAgICAgIC8vIFN0eWxlIHRoZSByZXNldCBidXR0b24gZGlmZmVyZW50bHlcbiAgICAgICAgJjpudGgtY2hpbGQoMikge1xuICAgICAgICAgIHdpZHRoOiBhdXRvO1xuICAgICAgICAgIHBhZGRpbmc6IDAgMTJweDtcbiAgICAgICAgICBmb250LXNpemU6IDE0cHg7XG4gICAgICAgIH1cbiAgICAgIH1cbiAgICB9XG4gIH1cbn1cbiJdfQ== */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><script src="../prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch("../static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://quartz.jzhao.xyz/index.xml"/></head><body data-slug="01-program/异步编程"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h2 class="page-title"><a href="..">Quartz 4</a></h2><div class="spacer mobile-only"></div><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><div class="search"><button class="search-button"><p>Search</p><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div class="search-layout" data-preview="true"></div></div></div></div></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="Dark mode"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="Light mode"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="readermode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="readerIcon" fill="currentColor" stroke="currentColor" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round" width="64px" height="64px" viewBox="0 0 24 24" aria-label="Reader mode"><title>Reader mode</title><g transform="translate(-1.8, -1.8) scale(1.15, 1.2)"><path d="M8.9891247,2.5 C10.1384702,2.5 11.2209868,2.96705384 12.0049645,3.76669482 C12.7883914,2.96705384 13.8709081,2.5 15.0202536,2.5 L18.7549359,2.5 C19.1691495,2.5 19.5049359,2.83578644 19.5049359,3.25 L19.5046891,4.004 L21.2546891,4.00457396 C21.6343849,4.00457396 21.9481801,4.28672784 21.9978425,4.6528034 L22.0046891,4.75457396 L22.0046891,20.25 C22.0046891,20.6296958 21.7225353,20.943491 21.3564597,20.9931534 L21.2546891,21 L2.75468914,21 C2.37499337,21 2.06119817,20.7178461 2.01153575,20.3517706 L2.00468914,20.25 L2.00468914,4.75457396 C2.00468914,4.37487819 2.28684302,4.061083 2.65291858,4.01142057 L2.75468914,4.00457396 L4.50368914,4.004 L4.50444233,3.25 C4.50444233,2.87030423 4.78659621,2.55650904 5.15267177,2.50684662 L5.25444233,2.5 L8.9891247,2.5 Z M4.50368914,5.504 L3.50468914,5.504 L3.50468914,19.5 L10.9478955,19.4998273 C10.4513189,18.9207296 9.73864328,18.5588115 8.96709342,18.5065584 L8.77307039,18.5 L5.25444233,18.5 C4.87474657,18.5 4.56095137,18.2178461 4.51128895,17.8517706 L4.50444233,17.75 L4.50368914,5.504 Z M19.5049359,17.75 C19.5049359,18.1642136 19.1691495,18.5 18.7549359,18.5 L15.2363079,18.5 C14.3910149,18.5 13.5994408,18.8724714 13.0614828,19.4998273 L20.5046891,19.5 L20.5046891,5.504 L19.5046891,5.504 L19.5049359,17.75 Z M18.0059359,3.999 L15.0202536,4 L14.8259077,4.00692283 C13.9889509,4.06666544 13.2254227,4.50975805 12.7549359,5.212 L12.7549359,17.777 L12.7782651,17.7601316 C13.4923805,17.2719483 14.3447024,17 15.2363079,17 L18.0059359,16.999 L18.0056891,4.798 L18.0033792,4.75457396 L18.0056891,4.71 L18.0059359,3.999 Z M8.9891247,4 L6.00368914,3.999 L6.00599909,4.75457396 L6.00599909,4.75457396 L6.00368914,4.783 L6.00368914,16.999 L8.77307039,17 C9.57551536,17 10.3461406,17.2202781 11.0128313,17.6202194 L11.2536891,17.776 L11.2536891,5.211 C10.8200889,4.56369974 10.1361548,4.13636104 9.37521067,4.02745763 L9.18347055,4.00692283 L8.9891247,4 Z"></path></g></svg></button></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,b)=>!a.isFolder&amp;&amp;!b.isFolder||a.isFolder&amp;&amp;b.isFolder?a.displayName.localeCompare(b.displayName,void 0,{numeric:!0,sensitivity:\&quot;base\&quot;}):!a.isFolder&amp;&amp;b.isFolder?1:-1&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>Explorer</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div class="explorer-content" aria-expanded="false"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div></div><div class="center"><div class="page-header"><div class="popover-hint"><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="../">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href="../01-program/">01 program</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>异步编程</a></div></nav><h1 class="article-title">异步编程</h1><p show-comma="true" class="content-meta"><time datetime="2025-08-01T13:39:34.000Z">Aug 01, 2025</time><span>44 min read</span></p></div></div><article class="popover-hint"><h1 id="javascript-异步编程深度解析从事件循环到现代并发模型">JavaScript 异步编程深度解析：从事件循环到现代并发模型<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#javascript-异步编程深度解析从事件循环到现代并发模型" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<blockquote>
+<p><a href="../01-program/异步编程——补充" class="internal alias" data-slug="01-program/异步编程——补充">补充内容点击此链接跳转</a></p>
+</blockquote>
+<h3 id="第一部分单线程的困境与并发模型">第一部分：单线程的困境与并发模型<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#第一部分单线程的困境与并发模型" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<h4 id="11-同步与异步执行核心冲突">1.1 同步与异步执行：核心冲突<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#11-同步与异步执行核心冲突" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。</p>
+<p>同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听者必须等待说者讲完才能回应。整个对话以一种严格、线性和阻塞的顺序进行 4。</p>
+<p>在 Web 应用的上下文中，这种阻塞行为对用户体验而言可能是灾难性的。JavaScript 运行在单一的“执行线程”上，这意味着它在任何给定时刻只能做一件事 5。如果程序遇到一个长时间运行的同步任务——例如复杂的数学计算、大规模数据处理循环或对慢速服务器的同步网络请求——整个应用程序就会冻结。用户界面会变得完全没有响应；按钮无法点击，动画停止，页面看起来就像崩溃了一样。这是因为唯一的线程正忙于等待那个漫长的任务完成，无法执行任何其他职责，比如响应用户输入 5。</p>
+<p>异步编程为这一困境提供了解决方案。它是一种“非阻塞”技术，允许程序启动一个可能耗时较长的任务，然后继续执行其他代码，而无需等待该任务完成 1。当这个耗时的任务最终完成时，程序会收到通知并获得结果，然后可以对其进行处理。这种模型极大地提升了性能和响应能力 1。</p>
+<p>一个关于异步执行的实用比喻是在现代快餐店点餐。你下单（启动异步任务），然后你不会在柜台前干等，而是会拿到一个取餐器（代表未来的结果，类似于 Promise）。有了这个取餐器，你就可以自由地找座位、和朋友聊天或看手机（程序继续执行其他任务）。当你的餐点准备好时，取餐器会震动并闪烁（回调被触发）。然后你回到柜台取餐（程序处理已完成任务的结果）。关键在于，在你的订单准备期间，你没有被阻塞，可以做其他事情。</p>
+<h4 id="12-javascript-运行时解开悖论">1.2 JavaScript 运行时：解开悖论<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#12-javascript-运行时解开悖论" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>一个常见的困惑点源于对 JavaScript 的双重描述。它被正确地定义为其核心是一门“单线程和同步”的语言 1，但同时又因其强大的“异步和并发”能力而备受赞誉 4。这不是一个矛盾，而是 JavaScript</p>
+<p>_引擎_与更广泛的 JavaScript _运行时环境_之间的一个关键区别。</p>
+<p>JavaScript 引擎本身，例如谷歌的 V8 或 Mozilla 的 SpiderMonkey，确实是单线程的。它只有一个调用栈，并且一次只能执行一段代码 5。这是其同步特性的根源。然而，当 JavaScript 在一个宿主环境（如 Web 浏览器或 Node.js 服务器）中运行时，引擎可以访问一套额外的组件，这些组件不属于 JavaScript 语言本身，而是由宿主环境提供的 1。这些外部组件可以在由环境管理的不同线程上并发处理操作，而不会阻塞 JavaScript 的主线程。因此，JavaScript 的异步能力是单线程引擎与其宿主环境的多线程能力之间共生关系的结果。</p>
+<p>这个运行时环境的主要组件协同工作，以实现这种看似神奇的效果 1：</p>
+<ul>
+<li>
+<p><strong>JavaScript 引擎</strong>：这是系统的核心，包含<strong>调用栈</strong>（跟踪函数执行）和<strong>堆</strong>（用于内存分配）。</p>
+</li>
+<li>
+<p><strong>Web API（在浏览器中）/ C++ API（在 Node.js 中）</strong>：这些是后台工作者。它们是环境提供的 API，用于处理那些否则会阻塞主线程的任务。例如定时器（<code>setTimeout</code>, <code>setInterval</code>）、DOM 操作和事件（<code>addEventListener</code>）以及网络请求（<code>fetch</code>, <code>XMLHttpRequest</code>）8。</p>
+</li>
+<li>
+<p><strong>任务队列</strong>：这些是存放准备好被执行的函数的等候区。当由 Web API 处理的后台任务完成时，其关联的回调函数会被放入这些队列之一。主要有两个队列：<strong>回调队列</strong>（也称宏任务队列）和<strong>微任务队列</strong>。</p>
+</li>
+<li>
+<p><strong>事件循环</strong>：这是伟大的协调者。它是一个持续运行的进程，其工作是监视调用栈和任务队列，并在适当时机将回调函数从队列移动到调用栈中执行 1。</p>
+</li>
+</ul>
+<h4 id="13-深入事件循环异步的引擎">1.3 深入事件循环：异步的引擎<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#13-深入事件循环异步的引擎" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>事件循环是允许单线程语言处理并发的机制。理解其精确的操作顺序是掌握异步 JavaScript 的关键。让我们详细研究其组件和过程。</p>
+<p>调用栈</p>
+<p>调用栈是一个遵循后进先出（LIFO）原则的简单数据结构 8。它跟踪当前正在执行的函数。当一个脚本调用一个函数时，该函数的一个新的“执行上下文”或“帧”被创建并推入栈顶。如果该函数又调用了另一个函数，第二个函数的新帧将被推到第一个函数的上方。当一个函数执行完毕并返回时，它的帧会从栈顶被弹出 10。程序从底层帧中它离开的地方继续执行。</p>
+<p>Web API：后台工作者</p>
+<p>当 JavaScript 引擎遇到对异步函数的调用时，例如 setTimeout，它不会直接处理它。相反，它会将任务委托给由浏览器提供的相应的 Web API 1。例如，当调用</p>
+<p><code>setTimeout(callback, 2000)</code> 时，引擎会将 <code>callback</code> 函数和 2000 毫秒的延迟交给浏览器的计时器 API。这个 API 在后台的一个单独线程上运行倒计时。这一点至关重要，因为它立即释放了 JavaScript 调用栈，允许主线程继续执行后续代码而不会被阻塞 6。</p>
+<p>任务队列：宏任务 vs. 微任务</p>
+<p>一旦由 Web API 处理的后台任务完成（例如，setTimeout 的计时器到期，或 fetch 的网络请求收到响应），其关联的回调函数并不会立即执行。相反，它被放置到一个等候区——一个任务队列中。存在两个具有不同优先级的不同队列 8：</p>
+<ol>
+<li>
+<p><strong>宏任务队列（或任务队列/回调队列）</strong>：此队列存放可以被看作是主要的、独立的任务的回调。宏任务的常见来源包括 <code>setTimeout</code>、<code>setInterval</code>、I/O 操作（如在 Node.js 中读取文件）以及用户发起的事件，如 UI 渲染和事件处理程序回调（<code>click</code>, <code>scroll</code>）6。</p>
+</li>
+<li>
+<p><strong>微任务队列</strong>：此队列用于存放那些应该在当前脚本执行完毕后，但在浏览器执行任何其他操作（如渲染或运行下一个宏任务）之前尽快执行的较小任务。它比宏任务队列具有更高的优先级。微任务最常见的来源是 Promise 的回调（传递给 <code>.then()</code>、<code>.catch()</code> 和 <code>.finally()</code> 的函数）以及 <code>await</code> 表达式之后代码的延续部分 8。</p>
+</li>
+</ol>
+<p>事件循环：伟大的协调者</p>
+<p>事件循环有一个根本性的工作：将任务从队列移动到调用栈中执行。它遵循一套非常严格和可预测的规则来完成这项工作 8：</p>
+<ol>
+<li>
+<p>循环持续监视调用栈。</p>
+</li>
+<li>
+<p>只要调用栈不为空，循环就什么也不做。</p>
+</li>
+<li>
+<p>当调用栈变为空时（意味着主脚本已执行完毕），循环首先检查<strong>微任务队列</strong>。</p>
+</li>
+<li>
+<p>如果微任务队列不为空，循环将取出第一个微任务，将其推入调用栈并执行它。它将重复此过程，执行队列中的_每一个微任务_，直到微任务队列完全清空。</p>
+</li>
+<li>
+<p>只有在微任务队列被完全清空后，循环才会将其注意力转向<strong>宏任务队列</strong>。</p>
+</li>
+<li>
+<p>如果宏任务队列中有任务，循环将只取_一个_（最旧的）宏任务，将其推入调用栈并执行它。</p>
+</li>
+<li>
+<p>在这个单一的宏任务完成且调用栈再次变为空后，循环并_不会_立即去取下一个宏任务。相反，它会返回到第 3 步，再次检查微任务队列。这是因为刚刚运行的宏任务可能已经安排了新的微任务（例如，通过解析一个 Promise），而这些微任务必须在任何其他工作进行之前优先处理。</p>
+</li>
+</ol>
+<p>这个优先级层次结构——在处理单个宏任务之前执行所有可用的微任务——是事件循环最关键且最常被误解的方面。它解释了为什么一个已解决的 Promise 的 <code>.then()</code> 回调总是在 <code>setTimeout(callback, 0)</code> 回调之前执行，即使两者看起来都是被安排“尽快”执行。Promise 回调是微任务，而 <code>setTimeout</code> 回调是宏任务，微任务总是在通往调用栈的竞赛中获胜。</p>
+<p>代码执行流程演示</p>
+<p>让我们跟踪以下代码的执行，看看事件循环的实际运作：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>console.log('Start'); // 同步</span></span>
+<span data-line> </span>
+<span data-line><span>setTimeout(() => {</span></span>
+<span data-line><span>  console.log('Timeout (Macrotask)'); // 异步 - 宏任务</span></span>
+<span data-line><span>}, 0);</span></span>
+<span data-line> </span>
+<span data-line><span>Promise.resolve().then(() => {</span></span>
+<span data-line><span>  console.log('Promise 1 (Microtask)'); // 异步 - 微任务</span></span>
+<span data-line><span>}).then(() => {</span></span>
+<span data-line><span>  console.log('Promise 2 (Microtask)'); // 异步 - 微任务</span></span>
+<span data-line><span>});</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('End'); // 同步</span></span></code></pre></figure>
+<ol>
+<li>
+<p><strong><code>console.log('Start')</code></strong>：这是同步的。它被推入调用栈，执行，打印 “Start”，然后被弹出。</p>
+</li>
+<li>
+<p><strong><code>setTimeout(...)</code></strong>：这是一个异步函数。对 <code>setTimeout</code> 的调用被推入调用栈。浏览器的 Web API 获得了回调函数和一个 0 毫秒的计时器。Web API 在后台开始计时。<code>setTimeout</code> 调用本身现在已经完成，并从栈中弹出。</p>
+</li>
+<li>
+<p><strong><code>Promise.resolve().then(...)</code></strong>：<code>Promise.resolve()</code> 部分创建了一个立即被履行的 Promise。对 <code>.then()</code> 的调用将其回调函数 (<code>() => console.log('Promise 1...')</code>) 安排放入<strong>微任务队列</strong>。下一个 <code>.then()</code> 安排其回调 (<code>() => console.log('Promise 2...')</code>) 在第一个完成后运行。</p>
+</li>
+<li>
+<p><strong><code>console.log('End')</code></strong>：这是同步的。它被推入调用栈，执行，打印 “End”，然后被弹出。</p>
+</li>
+<li>
+<p><strong>主脚本结束</strong>：初始脚本现已执行完毕，调用栈为空。事件循环接管。</p>
+</li>
+<li>
+<p><strong>事件循环：检查微任务</strong>：循环检查微任务队列。它找到了 “Promise 1” 的回调。它将此回调推入调用栈。回调执行，打印 “Promise 1”，然后被弹出。这个完成过程将_下一个_微任务，即 “Promise 2” 的回调，排入队列。</p>
+</li>
+<li>
+<p><strong>事件循环：再次检查微任务</strong>：循环再次检查微任务队列。它找到了 “Promise 2” 的回调。它将其推入栈中，执行，打印 “Promise 2”，然后被弹出。微任务队列现在为空。</p>
+</li>
+<li>
+<p><strong>事件循环：检查宏任务</strong>：既然微任务队列为空，循环检查宏任务队列。此时，<code>setTimeout</code> 的 0 毫秒计时器已经到期，其回调已被放入宏任务队列。</p>
+</li>
+<li>
+<p><strong>事件循环：执行宏任务</strong>：循环取出 <code>setTimeout</code> 的回调，将其推入调用栈。它执行，打印 “Timeout (Macrotask)“，然后被弹出。</p>
+</li>
+</ol>
+<p>最终的输出是可预测的：</p>
+<pre><code>Start
+End
+Promise 1 (Microtask)
+Promise 2 (Microtask)
+Timeout (Macrotask)
+</code></pre>
+<h3 id="第二部分异步编程模式的演进">第二部分：异步编程模式的演进<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#第二部分异步编程模式的演进" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>JavaScript 中异步编程的历程是一个演进的故事，每一种新模式的出现都是为了解决其前身的问题并改善其易用性。这个进程从原始、基础的回调模式发展到优雅、现代的 <code>async/await</code> 语法。</p>
+<h4 id="21-基础回调">2.1 基础：回调<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#21-基础回调" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>回调函数，简单来说，就是一个作为参数传递给另一个函数的函数，期望在稍后的某个时间点被“回调”（执行），通常是在一个异步操作完成之后 12。这是 JavaScript 中处理异步的最初也是最基本的方式 14。</p>
+<p>使用 <code>setTimeout</code> 的一个简单例子展示了这个概念：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>console.log('准备食材...');</span></span>
+<span data-line> </span>
+<span data-line><span>function cookMeal(callback) {</span></span>
+<span data-line><span>  // 模拟一个耗时的烹饪过程</span></span>
+<span data-line><span>  setTimeout(() => {</span></span>
+<span data-line><span>    const meal = '意式培根蛋面';</span></span>
+<span data-line><span>    console.log('餐点准备好了！');</span></span>
+<span data-line><span>    callback(meal); // 用结果进行“回调”</span></span>
+<span data-line><span>  }, 2000);</span></span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>function serveMeal(meal) {</span></span>
+<span data-line><span>  console.log(`正在上菜，美味的${meal}。`);</span></span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>cookMeal(serveMeal); // 将 serveMeal 作为回调传递</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('摆放餐具...');</span></span></code></pre></figure>
+<p>在这里，<code>serveMeal</code> 就是回调函数。它不会立即执行，而是被交给 <code>cookMeal</code>，后者仅在 2 秒的超时结束后才调用它。</p>
+<p>虽然对于单个操作来说很简单，但当处理一系列相互依赖的异步任务时，这种模式很快就会崩溃。这导致了一个臭名昭著的反模式，称为**“回调地狱”<strong>（Callback Hell）或</strong>“毁灭金字塔”**（Pyramid of Doom）2。当一个异步操作依赖于另一个的结果时，第二个操作的回调必须嵌套在第一个操作的回调内部。这创造了一个深度嵌套、呈金字塔形状的代码结构，极难阅读、调试和维护 12。</p>
+<p>考虑这样一个场景：获取用户数据，然后使用用户 ID 获取他们的博客文章，再使用文章 ID 获取其评论：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>// 回调地狱的例子</span></span>
+<span data-line><span>fetchUser(1, (error, user) => {</span></span>
+<span data-line><span>  if (error) {</span></span>
+<span data-line><span>    console.error('获取用户失败:', error);</span></span>
+<span data-line><span>  } else {</span></span>
+<span data-line><span>    console.log('获取到用户:', user.name);</span></span>
+<span data-line><span>    fetchPosts(user.id, (error, posts) => {</span></span>
+<span data-line><span>      if (error) {</span></span>
+<span data-line><span>        console.error('获取文章失败:', error);</span></span>
+<span data-line><span>      } else {</span></span>
+<span data-line><span>        console.log('获取到文章:', posts.length);</span></span>
+<span data-line><span>        fetchComments(posts.id, (error, comments) => {</span></span>
+<span data-line><span>          if (error) {</span></span>
+<span data-line><span>            console.error('获取评论失败:', error);</span></span>
+<span data-line><span>          } else {</span></span>
+<span data-line><span>            console.log('获取到评论:', comments.length);</span></span>
+<span data-line><span>            // 依此类推... 金字塔越来越深</span></span>
+<span data-line><span>          }</span></span>
+<span data-line><span>        });</span></span>
+<span data-line><span>      }</span></span>
+<span data-line><span>    });</span></span>
+<span data-line><span>  }</span></span>
+<span data-line><span>});</span></span></code></pre></figure>
+<p>视觉上的“金字塔”显而易见，重复的错误处理也是如此。然而，可读性问题掩盖了一个更深层、更隐蔽的问题：<strong>控制反转</strong>（Inversion of Control）16。当你将一个回调函数传递给另一个函数（尤其是第三方函数）时，你正在放弃对你程序一部分执行的控制权。你信任你传递给它的函数会：</p>
+<ol>
+<li>
+<p>精确地调用你的回调一次。</p>
+</li>
+<li>
+<p>仅在操作完成时调用它。</p>
+</li>
+<li>
+<p>以正确的顺序用正确的参数调用它。</p>
+</li>
+<li>
+<p>完全调用它，而不是吞掉任何错误。</p>
+</li>
+</ol>
+<p>宿主函数中的任何错误都可能导致你的回调被多次调用、永不调用或使用不正确的数据调用，从而导致不可预测和脆弱的应用程序行为。你已经将你的逻辑控制权反转并交给了外部实体。Promise 的发明正是为了解决这个根本性的信任问题，将控制权交还给开发者。</p>
+<h4 id="22-范式转换promise">2.2 范式转换：Promise<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#22-范式转换promise" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p><code>Promise</code> 是一个特殊的 JavaScript 对象，它充当异步操作最终结果的占位符 17。它代表一个未来的值，承诺在某个时刻要么提供一个成功的结果，要么提供一个失败的原因。这种基于对象的方法从根本上改变了我们与异步代码的交互方式。</p>
+<p>一个 Promise 存在于三种互斥状态之一，形成一个简单但健壮的状态机 17：</p>
+<ul>
+<li>
+<p><strong><code>pending</code></strong>（等待中）：初始状态。异步操作已启动，但尚未完成或失败。</p>
+</li>
+<li>
+<p><strong><code>fulfilled</code></strong>（已履行）或 <strong><code>resolved</code></strong>（已解决）：操作成功完成，Promise 现在持有一个结果值。</p>
+</li>
+<li>
+<p><strong><code>rejected</code></strong>（已拒绝）：操作失败，Promise 现在持有一个错误或失败的原因。</p>
+</li>
+</ul>
+<p>这个状态机的一个关键特性是它一旦“落定”（settled）就不可变。一个 Promise 只能从 <code>pending</code> 转换到 <code>fulfilled</code>，或者从 <code>pending</code> 转换到 <code>rejected</code>，并且这种转换只能发生_一次_。在一个 Promise 被履行或拒绝后，它就被认为是“落定的”，其状态和值永远不能再改变。任何后续试图解决或拒绝它的尝试都会被简单地忽略 20。</p>
+<p>这个单一落定的保证直接解决了“控制反转”问题。你不再传递一个脆弱的回调函数，而是收到了一个 <code>Promise</code> 对象。这个对象是一份值得信赖的契约。你可以根据需要向这个 Promise 附加任意多的处理程序，并确信它们将根据其最终的、不可变的状态被调用。控制权不再被反转；它被封装在 Promise 的可预测行为中。</p>
+<p>消费 Promise：.then()、.catch() 和 .finally()</p>
+<p>为了使用 Promise 的未来值，我们使用特定的方法为其附加处理程序 17：</p>
+<ul>
+<li>
+<p><strong><code>.then(onFulfilled, onRejected)</code></strong>：这是消费 Promise 的主要方法。它接受两个可选的函数参数。第一个 <code>onFulfilled</code>，在 Promise 被履行时执行，并接收成功的值。第二个 <code>onRejected</code>，在 Promise 被拒绝时执行，并接收错误原因。至关重要的是，<code>.then()</code> 本身返回一个_新的_ Promise。这就是实现<strong>链式调用</strong>的魔力所在，它使我们能够以一种干净、扁平的结构对异步操作进行排序 17。</p>
+</li>
+<li>
+<p><strong><code>.catch(onRejected)</code></strong>：这是 <code>.then(null, onRejected)</code> 的语法糖。它提供了一种专门且高度可读的方式来处理错误。当链中的一个 Promise 被拒绝时，执行会沿着链向下跳转到最近的 <code>.catch()</code> 处理程序，从而实现集中和清晰的错误管理 17。</p>
+</li>
+<li>
+<p><strong><code>.finally(onSettled)</code></strong>：此方法注册一个回调，该回调将在 Promise 落定（无论是履行还是拒绝）时执行。它非常适合用于清理逻辑，例如隐藏加载指示器或关闭数据库连接，这些逻辑需要在成功和失败的情况下都运行 20。</p>
+</li>
+</ul>
+<p>用 Promise 重构回调地狱</p>
+<p>让我们用 Promise 链的力量重写我们嵌套的回调示例：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>// 同样的操作序列，现在用 Promise 扁平化</span></span>
+<span data-line><span>fetchUser(1)</span></span>
+<span data-line><span> .then(user => {</span></span>
+<span data-line><span>    console.log('获取到用户:', user.name);</span></span>
+<span data-line><span>    return fetchPosts(user.id); // 返回下一个 Promise</span></span>
+<span data-line><span>  })</span></span>
+<span data-line><span> .then(posts => {</span></span>
+<span data-line><span>    console.log('获取到文章:', posts.length);</span></span>
+<span data-line><span>    return fetchComments(posts.id); // 返回下一个 Promise</span></span>
+<span data-line><span>  })</span></span>
+<span data-line><span> .then(comments => {</span></span>
+<span data-line><span>    console.log('获取到评论:', comments.length);</span></span>
+<span data-line><span>  })</span></span>
+<span data-line><span> .catch(error => {</span></span>
+<span data-line><span>    // 单个 catch 块处理前面任何步骤的错误</span></span>
+<span data-line><span>    console.error('链中发生错误:', error);</span></span>
+<span data-line><span>  });</span></span></code></pre></figure>
+<p>金字塔消失了。代码现在是线性的、可读的，并且有一个单一、优雅的错误处理点。</p>
+<h4 id="23-现代标准asyncawait">2.3 现代标准：<code>async/await</code><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#23-现代标准asyncawait" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>在 ES2017 中引入的 <code>async/await</code> 并不是一种处理异步的新方式，而是构建在 Promise 之上的“语法糖” 14。它提供了一种新的语法，允许开发者编写的异步、基于 Promise 的代码看起来和行为上更像传统的同步代码。</p>
+<ul>
+<li>
+<p><strong><code>async</code> 关键字</strong>：当放在函数声明前（<code>async function myFunction() {}</code>）时，它做了两件事：</p>
+<ol>
+<li>
+<p>它确保该函数总是隐式地返回一个 <code>Promise</code>。如果函数显式返回一个值，该值将被包装在一个已履行的 Promise 中。</p>
+</li>
+<li>
+<p>它允许在该函数体内使用 <code>await</code> 关键字 21。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong><code>await</code> 关键字</strong>：此关键字只能在 <code>async</code> 函数内部使用。当放在一个 <code>Promise</code> 前面时，它实际上会“暂停”<code>async</code> 函数在该行的执行。它等待该 Promise 落定。如果 Promise 履行，<code>await</code> 会“解包”履行的值，然后可以将其赋给一个变量。如果 Promise 拒绝，<code>await</code> 会抛出拒绝的原因作为错误，这可以被标准的 <code>try...catch</code> 块捕获 21。</p>
+</li>
+</ul>
+<p><code>async/await</code> 的真正创新之处在于它如何使代码结构与人类自然的、顺序性的思维方式保持一致 16。回调金字塔甚至</p>
+<p><code>.then()</code> 链都迫使我们以一种非线性的、“然后做这个”的心智模型来思考。相比之下，<code>await</code> 让我们能够写出 <code>const user = await fetchUser(1);</code> 这样的代码，其读起来就像一个同步的变量赋值。Promise 解析及其回调被调度到微任务队列的底层复杂性被语法完全抽象掉了。</p>
+<p>这种语法上的简化功能非常强大。这意味着我们可以为异步操作使用熟悉的、同步风格的控制流结构：</p>
+<ul>
+<li>
+<p><strong>使用 <code>try...catch</code> 进行错误处理</strong>：这提供了一种干净、标准且强大的方式来处理 <code>try</code> 块内任何 <code>await</code> 的 Promise 的错误 23。</p>
+</li>
+<li>
+<p><strong>循环和条件语句</strong>：我们可以使用在每次迭代中包含 <code>await</code> 调用的 <code>for</code> 循环，或者根据 <code>await</code> 结果进行分支的 <code>if/else</code> 语句。用 <code>.then()</code> 链来实现这些是极其困难和笨拙的 23。</p>
+</li>
+</ul>
+<p>在底层，JavaScript 引擎仍然使用完全相同的 Promise 和微任务队列系统。<code>await</code> 语句之后的代码实际上被包装在所等待的 Promise 的 <code>.then()</code> 回调中。<code>async/await</code> 是一个绝妙的抽象，而不是对底层并发模型的替代。</p>
+<p>使用 async/await 的最终重构</p>
+<p>我们的数据获取序列达到了其最终的、最可读的形式：</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>// 可读性的终极进化</span></span>
+<span data-line><span>async function displayUserContent(userId) {</span></span>
+<span data-line><span>  try {</span></span>
+<span data-line><span>    const user = await fetchUser(userId);</span></span>
+<span data-line><span>    console.log('获取到用户:', user.name);</span></span>
+<span data-line> </span>
+<span data-line><span>    const posts = await fetchPosts(user.id);</span></span>
+<span data-line><span>    console.log('获取到文章:', posts.length);</span></span>
+<span data-line> </span>
+<span data-line><span>    const comments = await fetchComments(posts.id);</span></span>
+<span data-line><span>    console.log('获取到评论:', comments.length);</span></span>
+<span data-line><span>  } catch (error) {</span></span>
+<span data-line><span>    // 单个、同步风格的 catch 块处理所有错误</span></span>
+<span data-line><span>    console.error('发生错误:', error);</span></span>
+<span data-line><span>  }</span></span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>displayUserContent(1);</span></span></code></pre></figure>
+<p>这段代码干净、线性且易于理解，代表了当前异步 JavaScript 语法的巅峰。</p>
+<h3 id="第三部分实践中的异步-javascript">第三部分：实践中的异步 JavaScript<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#第三部分实践中的异步-javascript" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>从理论转向应用，我们可以看到这些异步模式如何被用来解决常见的、现实世界中的编程挑战，从管理复杂的工作流到通过网络进行通信。</p>
+<h4 id="31-高级控制流组合多个-promise">3.1 高级控制流：组合多个 Promise<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#31-高级控制流组合多个-promise" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>通常，我们需要管理多个并发运行的异步操作。<code>Promise</code> 对象为此提供了一套强大的静态方法，允许进行复杂的控制流 14。</p>
+<ul>
+<li>
+<p><strong><code>Promise.all(iterable)</code></strong>：此方法接受一个 Promise 的可迭代对象（如数组），并返回一个单一的新 Promise。这个新 Promise 仅在可迭代对象中的_所有_ Promise 都已履行时才会履行。其履行值是一个数组，包含了所有输入 Promise 的履行值，顺序与输入时相同。然而，如果可迭代对象中的_任何一个 Promise_ 被拒绝，<code>Promise.all()</code> 将立即以该第一个被拒绝的 Promise 的原因而拒绝。这是一种“全有或全无”的方法，非常适合在渲染 UI 组件前需要获取多个关键数据片的场景。</p>
+</li>
+<li>
+<p><strong><code>Promise.race(iterable)</code></strong>：此方法也返回一个单一的 Promise。这个 Promise 会在可迭代对象中的_第一个_ Promise 落定（无论是履行还是拒绝）时立即落定。这是一场“第一个冲过终点线”的比赛。一个常见的用例是将一个网络请求与一个 <code>setTimeout</code> Promise 进行竞争，以实现超时功能。如果网络请求在指定时间内没有完成，超时 Promise 将首先拒绝，赢得比赛，从而允许你处理超时错误。</p>
+</li>
+<li>
+<p><strong><code>Promise.allSettled(iterable)</code></strong>：当你需要知道每个 Promise 的结果，无论成功与否时，可以使用此方法。它返回一个 Promise，该 Promise 在所有给定的 Promise 都已落定（无论是履行还是拒绝）后履行。其履行值是一个对象数组，每个对象描述了一个 Promise 的结果，包括其状态（<code>'fulfilled'</code> 或 <code>'rejected'</code>）及其值或原因。这对于运行多个独立任务，并且其中一个的失败不应阻止你看到其他任务结果的情况非常理想。</p>
+</li>
+<li>
+<p><strong><code>Promise.any(iterable)</code></strong>：此方法接受一个 Promise 的可迭代对象，并返回一个单一的 Promise，该 Promise 在可迭代对象中的_第一个_ Promise 履行时立即履行。它仅在可迭代对象中的_所有_ Promise 都被拒绝时才会被拒绝。这对于“第一个成功”的场景很有用，例如查询多个冗余的 API 端点，并采用最快响应的那个的回复。</p>
+</li>
+</ul>
+<h4 id="32-案例研究使用-fetch-api-进行网络通信">3.2 案例研究：使用 <code>fetch</code> API 进行网络通信<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#32-案例研究使用-fetch-api-进行网络通信" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p><code>fetch</code> API 是在浏览器和其他环境中进行网络请求的现代、基于 Promise 的接口 27。它是一个消费 Promise 的完美实践范例。</p>
+<p>发起 GET 请求</p>
+<p>获取 JSON 数据是一项常见任务。以下是分别使用 .then/.catch 和更简洁的 async/await 语法来完成此操作的方法。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>// 使用.then/.catch</span></span>
+<span data-line><span>fetch('https://api.example.com/data')</span></span>
+<span data-line><span> .then(response => response.json()) //.json() 也返回一个 Promise</span></span>
+<span data-line><span> .then(data => {</span></span>
+<span data-line><span>    console.log('数据已接收:', data);</span></span>
+<span data-line><span>  })</span></span>
+<span data-line><span> .catch(error => {</span></span>
+<span data-line><span>    console.error('Fetch 错误:', error);</span></span>
+<span data-line><span>  });</span></span>
+<span data-line> </span>
+<span data-line><span>// 使用 async/await</span></span>
+<span data-line><span>async function fetchData() {</span></span>
+<span data-line><span>  try {</span></span>
+<span data-line><span>    const response = await fetch('https://api.example.com/data');</span></span>
+<span data-line><span>    const data = await response.json();</span></span>
+<span data-line><span>    console.log('数据已接收:', data);</span></span>
+<span data-line><span>  } catch (error) {</span></span>
+<span data-line><span>    console.error('Fetch 错误:', error);</span></span>
+<span data-line><span>  }</span></span>
+<span data-line><span>}</span></span></code></pre></figure>
+<p>发起 POST 请求</p>
+<p>要向服务器发送数据，你可以通过一个选项对象来配置 fetch 调用，指定方法、头部和主体 29。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>async function postData(url = '', data = {}) {</span></span>
+<span data-line><span>  try {</span></span>
+<span data-line><span>    const response = await fetch(url, {</span></span>
+<span data-line><span>      method: 'POST',</span></span>
+<span data-line><span>      headers: {</span></span>
+<span data-line><span>        'Content-Type': 'application/json'</span></span>
+<span data-line><span>      },</span></span>
+<span data-line><span>      body: JSON.stringify(data) // 主体数据必须是字符串</span></span>
+<span data-line><span>    });</span></span>
+<span data-line><span>    return await response.json(); // 解析来自服务器的 JSON 响应</span></span>
+<span data-line><span>  } catch (error) {</span></span>
+<span data-line><span>    console.error('发送数据时出错:', error);</span></span>
+<span data-line><span>  }</span></span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>postData('https://api.example.com/users', { name: 'John Doe', job: 'Developer' })</span></span>
+<span data-line><span> .then(data => {</span></span>
+<span data-line><span>    console.log('服务器响应:', data);</span></span>
+<span data-line><span>  });</span></span></code></pre></figure>
+<p>对于刚接触 <code>fetch</code> 的开发者来说，一个常见的陷阱是它处理错误的方式。<code>fetch()</code> 返回的 <code>Promise</code> <strong>仅在</strong>发生网络层面故障时（例如，用户离线、DNS 查找失败）才会<strong>拒绝</strong>。它<strong>不会</strong>因为 HTTP 错误状态码（如 404 Not Found 或 500 Internal Server Error）而拒绝。从网络角度看，收到 404 响应是一个成功的请求-响应周期。</p>
+<p>因此，在这些情况下，<code>fetch</code> 的 Promise 将会_履行_，<code>.catch()</code> 块将不会被触发。开发者有责任在成功处理程序内部检查响应状态。<code>Response</code> 对象有一个方便的布尔属性 <code>response.ok</code>，对于 200-299 范围内的状态码，该值为 <code>true</code>。正确的模式是检查此属性并手动抛出错误，以将控制流转向错误处理逻辑 27。</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>// fetch 的正确错误处理</span></span>
+<span data-line><span>async function getProtectedData() {</span></span>
+<span data-line><span>  try {</span></span>
+<span data-line><span>    const response = await fetch('https://api.example.com/protected-resource');</span></span>
+<span data-line><span>    </span></span>
+<span data-line><span>    // 这个检查至关重要！</span></span>
+<span data-line><span>    if (!response.ok) {</span></span>
+<span data-line><span>      throw new Error(`HTTP 错误！状态码: ${response.status}`);</span></span>
+<span data-line><span>    }</span></span>
+<span data-line><span>    </span></span>
+<span data-line><span>    const data = await response.json();</span></span>
+<span data-line><span>    console.log(data);</span></span>
+<span data-line><span>  } catch (error) {</span></span>
+<span data-line><span>    // 现在这将捕获网络错误和 HTTP 错误。</span></span>
+<span data-line><span>    console.error('获取数据失败:', error);</span></span>
+<span data-line><span>  }</span></span>
+<span data-line><span>}</span></span></code></pre></figure>
+<h4 id="33-天生异步dom-事件">3.3 天生异步：DOM 事件<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#33-天生异步dom-事件" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>DOM 事件处理或许是日常 JavaScript 编程中最常见、最具体的异步事件循环模型的例子。当你向一个元素添加事件监听器时，你正在参与整个异步周期 5。</p>
+<p>考虑这段简单的代码：</p>
+<p>button.addEventListener(‘click’, handleClick);</p>
+<ol>
+<li>
+<p><strong>向 Web API 注册</strong>：当这行代码执行时，你并没有立即调用 <code>handleClick</code>。你正在将 <code>handleClick</code> 函数注册到浏览器的事件监听器 API，这是一个 Web API 6。这个 API 现在负责监听该特定按钮上的 ‘click’ 事件。</p>
+</li>
+<li>
+<p><strong>后台操作</strong>：浏览器的内部机制，在与 JavaScript 引擎不同的线程上运行，监视用户交互。这完全在后台发生。</p>
+</li>
+<li>
+<p><strong>将回调排入队列</strong>：当用户物理点击按钮时，浏览器不会中断任何当前正在运行的 JavaScript。相反，它会创建一个任务，并将 <code>handleClick</code> 函数放入<strong>宏任务队列</strong> 6。</p>
+</li>
+<li>
+<p><strong>事件循环协调</strong>：在稍后的某个时刻，当调用栈为空时，事件循环将在宏任务队列中看到 <code>handleClick</code> 函数。然后它会将其出队并推入调用栈中执行。</p>
+</li>
+</ol>
+<p>这整个过程完美地展示了异步模型：将任务（监听点击）委托给宿主环境，使用队列来管理已完成事件的回调，并依赖事件循环来协调这些回调在主线程上的执行。</p>
+<h3 id="第四部分综合与建议">第四部分：综合与建议<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#第四部分综合与建议" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<p>掌握异步编程不仅是学习一种新语法，更是理解一种基本的计算模型。事件循环及其调用栈、Web API 和双重任务队列，是驱动 JavaScript 中所有异步行为的引擎。一旦你内化了这个模型，回调的行为、Promise 的状态转换以及 <code>await</code> 的“暂停”特性都会变得清晰和可预测。</p>
+<p>从回调的原始力量到 Promise 的结构化可靠性，再到 <code>async/await</code> 的人体工程学优雅，这一演进证明了 JavaScript 社区为编写更有效、更人性化的复杂代码所做的持续努力。通过理解这一历程，你不仅仅是在学习三种不同的技术，更是在洞察现代软件开发的本质。对于今天的开发者来说，<code>async/await</code> 是异步工具箱中最精良的工具，但真正的大师知道每一种工具是如何以及为何被锻造出来的。</p>
+<h4 id="41-对比分析回调-vs-promise-vs-asyncawait">4.1 对比分析：回调 vs. Promise vs. <code>async/await</code><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#41-对比分析回调-vs-promise-vs-asyncawait" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>从回调到 Promise 再到 <code>async/await</code> 的演进，最好被理解为一系列解决先前问题的方案。回调提供了异步的基础机制，但导致了难以管理的代码结构（“回调地狱”）和脆弱的“控制反转”模型 16。Promise 通过引入一个可靠、可组合的对象，标准化了链式调用和错误处理，解决了这些问题 31。最后，</p>
+<p><code>async/await</code> 在 Promise 的基础上构建，提供了一种高级语法，通过允许以线性的、同步的风格编写异步代码，极大地降低了认知负荷 14。</p>
+<p>下表对这三种模式在关键特性上进行了直接比较 25。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="table-container"><table><thead><tr><th>特性</th><th>回调 (Callbacks)</th><th>Promise</th><th><code>async/await</code></th></tr></thead><tbody><tr><td><strong>核心概念</strong></td><td>作为参数传递以便稍后执行的函数。</td><td>代表未来值的对象，具有等待、履行或拒绝的状态。</td><td>Promise 之上的语法糖，允许以同步风格编写异步代码。</td></tr><tr><td><strong>可读性与结构</strong></td><td>差。导致嵌套、金字塔式的结构（“回调地狱”），难以阅读和理解。</td><td>好。将嵌套结构扁平化为线性的 <code>.then()</code> 链。比回调更具可读性。</td><td>优秀。看起来几乎与同步代码相同，使其高度可读和直观。</td></tr><tr><td><strong>错误处理</strong></td><td>繁琐。通常需要在每个回调内部进行 <code>if (error)</code> 检查，导致代码重复且容易出错。</td><td>好。使用单个 <code>.catch()</code> 块对整个链进行集中式错误处理。</td><td>优秀。使用标准、熟悉的 <code>try...catch</code> 块，既干净又强大。</td></tr><tr><td><strong>控制流</strong></td><td>脆弱。存在“控制反转”问题，即你信任外部函数能正确管理你的回调。</td><td>健壮。通过返回可预测的 <code>Promise</code> 对象解决了控制反转问题。提供强有力的保证。</td><td>健壮且直观。建立在 Promise 之上，因此继承了其可靠性。允许使用标准循环和条件语句。</td></tr><tr><td><strong>最佳使用场景</strong></td><td>与只支持回调的旧版 API 交互。非常简单的、一次性的异步任务。</td><td>需要使用 <code>Promise.all()</code>、<code>Promise.race()</code> 等进行高级组合的复杂异步序列。</td><td>由于其卓越的可读性和可维护性，是大多数现代异步 JavaScript 的默认选择。</td></tr></tbody></table></div>
+<h4 id="42-讲师指南何时使用每种模式">4.2 讲师指南：何时使用每种模式<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#42-讲师指南何时使用每种模式" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>虽然 <code>async/await</code> 是现代标准，但一个熟练的开发者了解整个工具箱，并知道何时每种工具最合适。</p>
+<ul>
+<li>
+<p><strong>何时使用回调：</strong></p>
+<ul>
+<li>
+<p>当你被迫使用时。许多旧的 Node.js 库或浏览器 API 是在 Promise 成为标准之前构建的，只提供基于回调的接口。在这些情况下，你别无选择。一个好的做法是立即将此类函数“Promise 化”——将它们包装在一个 <code>Promise</code> 中，以便你的应用程序的其余部分可以使用现代接口 25。</p>
+</li>
+<li>
+<p>对于极其简单的、非关键的事件监听器，如 <code>element.addEventListener('click', () => {... })</code>，其中创建 Promise 的开销感觉没有必要。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>何时使用 Promise (带 <code>.then/.catch</code>)：</strong></p>
+<ul>
+<li>
+<p>当你需要并发运行多个异步操作并使用 <code>Promise.all()</code> 或 <code>Promise.race()</code> 等组合器处理它们的结果时。虽然这也可以用 <code>async/await</code> 完成，但对于这些特定的组合模式，Promise 语法有时可能更直接和清晰。</p>
+</li>
+<li>
+<p>当你处于不支持 <code>async</code> 函数的代码环境中（今天非常罕见），或者当你编写一个需要被同步和异步代码路径同时消费的函数，而不想强迫消费者也必须是 <code>async</code> 时。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>何时使用 <code>async/await</code>：</strong></p>
+<ul>
+<li>
+<p>这应该是你<strong>几乎所有新异步代码的默认选择</strong> 14。在可读性、可维护性和调试方面的优势是巨大的。它在任何涉及顺序异步步骤的场景中都表现出色，因为它将逻辑转换为简单的、自上而下的脚本。其使用</p>
+<p><code>try...catch</code> 的能力使得错误处理远比任何其他模式都更健壮和熟悉。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="43-结束语拥抱异步">4.3 结束语：拥抱异步<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#43-结束语拥抱异步" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h4>
+<p>掌握异步编程不仅仅是学习一种新语法，更是理解一种基本的计算模型。事件循环，及其调用栈、Web API 和双重任务队列，是驱动 JavaScript 中所有异步行为的引擎。一旦你内化了这个模型，回调的行为、Promise 的状态转换以及 <code>await</code> 的“暂停”特性都会变得清晰和可预测。</p>
+<p>从回调的原始力量到 Promise 的结构化可靠性，再到 <code>async/await</code> 的人体工程学优雅，这一演进是 JavaScript 社区追求更有效、更人性化的方式来编写复杂代码的证明。通过理解这一历程，你不仅是在学习三种不同的技术，更是在洞察现代软件开发的本质。对于今天的开发者来说，<code>async/await</code> 是异步工具箱中最精良的工具，但真正的大师知道每一种工具是如何以及为何被锻造出来的。</p></article><hr/><div class="page-footer"></div></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div><button class="global-graph-icon" aria-label="Global Graph"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+                s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+                c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+                C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+                c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+                v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+                s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+                C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+                S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+                s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+                s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></button></div><div class="global-graph-outer"><div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div></div></div><div class="toc desktop-only"><button type="button" class="toc-header" aria-controls="toc-content" aria-expanded="true"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><ul class="toc-content overflow" id="list-1"><li class="depth-0"><a href="#javascript-异步编程深度解析从事件循环到现代并发模型" data-for="javascript-异步编程深度解析从事件循环到现代并发模型">JavaScript 异步编程深度解析：从事件循环到现代并发模型</a></li><li class="depth-2"><a href="#第一部分单线程的困境与并发模型" data-for="第一部分单线程的困境与并发模型">第一部分：单线程的困境与并发模型</a></li><li class="depth-2"><a href="#第二部分异步编程模式的演进" data-for="第二部分异步编程模式的演进">第二部分：异步编程模式的演进</a></li><li class="depth-2"><a href="#第三部分实践中的异步-javascript" data-for="第三部分实践中的异步-javascript">第三部分：实践中的异步 JavaScript</a></li><li class="depth-2"><a href="#第四部分综合与建议" data-for="第四部分综合与建议">第四部分：综合与建议</a></li><li class="overflow-end"></li></ul></div><div class="backlinks"><h3>Backlinks</h3><ul id="list-2" class="overflow"><li><a href="../" class="internal">index</a></li><li class="overflow-end"></li></ul></div></div><footer class><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.5.1</a> © 2025</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></div></body><script type="application/javascript">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script><script type="module">function f(i,e){if(!i)return;function r(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function t(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}i?.addEventListener("click",r),window.addCleanup(()=>i?.removeEventListener("click",r)),document.addEventListener("keydown",t),window.addCleanup(()=>document.removeEventListener("keydown",t))}function y(i){for(;i.firstChild;)i.removeChild(i.firstChild)}var h=class{constructor(e,r){this.container=e;this.content=r;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),r=this.onMouseMove.bind(this),t=this.onMouseUp.bind(this),o=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",r),document.addEventListener("mouseup",t),window.addEventListener("resize",o),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",r),()=>document.removeEventListener("mouseup",t),()=>window.removeEventListener("resize",o))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let r=this.createButton("+",()=>this.zoom(.1)),t=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(t),e.appendChild(o),e.appendChild(r),this.container.appendChild(e)}createButton(e,r){let t=document.createElement("button");return t.textContent=e,t.className="mermaid-control-button",t.addEventListener("click",r),window.addCleanup(()=>t.removeEventListener("click",r)),t}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}zoom(e){let r=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),t=this.content.getBoundingClientRect(),o=t.width/2,n=t.height/2,c=r-this.scale;this.currentPan.x-=o*c,this.currentPan.y-=n*c,this.scale=r,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){this.scale=1;let e=this.content.querySelector("svg");this.currentPan={x:e.getBoundingClientRect().width/2,y:e.getBoundingClientRect().height/2},this.updateTransform()}},C=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],E;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;E||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let r=E.default,t=new WeakMap;for(let n of e)t.set(n,n.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let a=t.get(s);a&&(s.innerHTML=a)}let n=C.reduce((s,a)=>(s[a]=window.getComputedStyle(document.documentElement).getPropertyValue(a),s),{}),c=document.documentElement.getAttribute("saved-theme")==="dark";r.initialize({startOnLoad:!1,securityLevel:"loose",theme:c?"dark":"base",themeVariables:{fontFamily:n["--codeFont"],primaryColor:n["--light"],primaryTextColor:n["--darkgray"],primaryBorderColor:n["--tertiary"],lineColor:n["--darkgray"],secondaryColor:n["--secondary"],tertiaryColor:n["--tertiary"],clusterBkg:n["--light"],edgeLabelBackground:n["--highlight"]}}),await r.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let n=0;n<e.length;n++){let v=function(){let g=l.querySelector("#mermaid-space"),m=l.querySelector(".mermaid-content");if(!m)return;y(m);let w=c.querySelector("svg").cloneNode(!0);m.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new h(g,m)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},c=e[n],s=c.parentElement,a=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(a),L=a.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),f(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="../postscript.js" type="module"></script></html>
