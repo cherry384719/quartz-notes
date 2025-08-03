@@ -40,17 +40,6 @@ jobs:
       - name: Check Node version
         run: node -v && npm -v
 
-      - name: Copy PDF files
-        run: |
-          mkdir -p public/pdf
-          if [ -d "public/pdf" ]; then
-            echo "PDF directory exists, copying files..."
-            find public/pdf -name "*.pdf" -exec echo "Found: {}" \;
-            cp -r public/pdf/* public/pdf/ 2>/dev/null || true
-          else
-            echo "No PDF directory found"
-          fi
-
 
   deploy:
     needs: build
