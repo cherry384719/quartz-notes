@@ -1,6 +1,7 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
-// 移除这行错误的导入：import { StaticFiles } from "@quartz/plugin-static-files"
+import { StaticFiles } from "@quartz/plugin-static-files"
+
 
 /**
  * Quartz 4 Configuration
@@ -86,12 +87,13 @@ const config: QuartzConfig = {
         enableRSS: true,
       }),
       Plugin.Assets(),
-      Plugin.Static(), // 这个插件已经足够处理静态文件了
-      // 移除这行：StaticFiles({ dir: "static" }),
+      Plugin.Static(),
+      StaticFiles({ dir: "static" }),
+      
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       // Comment out CustomOgImages to speed up build time
-      // Plugin.Custom OgImages(),
+      // Plugin.CustomOgImages(),
     ],
   },
 }
