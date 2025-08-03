@@ -1,7 +1,11 @@
 .DS_Store
 .gitignore
 node_modules
-public
+public/*.html
+public/*.js
+public/*.css
+public/static/
+!public/pdf/
 prof
 tsconfig.tsbuildinfo
 .obsidian
