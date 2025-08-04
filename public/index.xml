@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
     <channel>
-      <title>Quartz 4</title>
+      <title>S+Zn</title>
       <link>https://quartz.jzhao.xyz</link>
-      <description>Last 10 notes on Quartz 4</description>
+      <description>Last 10 notes on S+Zn</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
-    <title>测试pdf显示和下载效果</title>
-    <link>https://quartz.jzhao.xyz/%E6%B5%8B%E8%AF%95pdf%E6%98%BE%E7%A4%BA%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%95%88%E6%9E%9C</link>
-    <guid>https://quartz.jzhao.xyz/%E6%B5%8B%E8%AF%95pdf%E6%98%BE%E7%A4%BA%E5%92%8C%E4%B8%8B%E8%BD%BD%E6%95%88%E6%9E%9C</guid>
-    <description><![CDATA[  显示图片： 显示下载链接：点击查看 PDF 显示英语报刊： . ]]></description>
-    <pubDate>Sun, 03 Aug 2025 07:32:39 GMT</pubDate>
+    <title>test</title>
+    <link>https://quartz.jzhao.xyz/test</link>
+    <guid>https://quartz.jzhao.xyz/test</guid>
+    <description><![CDATA[ Markdown语法强大功能展示 📊 复杂数学公式展示 1. ]]></description>
+    <pubDate>Mon, 04 Aug 2025 04:16:04 GMT</pubDate>
   </item><item>
     <title>index</title>
     <link>https://quartz.jzhao.xyz/</link>
