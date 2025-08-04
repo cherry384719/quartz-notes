@@ -6,17 +6,17 @@
       <description>Last 10 notes on S+Zn</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>index</title>
+    <link>https://quartz.jzhao.xyz/</link>
+    <guid>https://quartz.jzhao.xyz/</guid>
+    <description><![CDATA[  本笔记网站由github开源项目quartz搭建，部署于github pages上，仓库地址为：quartz-notes 目录： 1. program 闭包 异步编程 异步编程——补充 JavaScript 点击查看 PDF. ]]></description>
+    <pubDate>Mon, 04 Aug 2025 14:19:55 GMT</pubDate>
+  </item><item>
     <title>test</title>
     <link>https://quartz.jzhao.xyz/test</link>
     <guid>https://quartz.jzhao.xyz/test</guid>
     <description><![CDATA[ Markdown语法强大功能展示 📊 复杂数学公式展示 1. ]]></description>
     <pubDate>Mon, 04 Aug 2025 04:16:04 GMT</pubDate>
-  </item><item>
-    <title>index</title>
-    <link>https://quartz.jzhao.xyz/</link>
-    <guid>https://quartz.jzhao.xyz/</guid>
-    <description><![CDATA[  本笔记网站由github开源项目quartz搭建，部署于github pages上，仓库地址为：quartz-notes 目录： 1. program 闭包 异步编程 异步编程——补充 JavaScript . ]]></description>
-    <pubDate>Sat, 02 Aug 2025 04:51:19 GMT</pubDate>
   </item><item>
     <title>JavaScript</title>
     <link>https://quartz.jzhao.xyz/01-program/JavaScript</link>

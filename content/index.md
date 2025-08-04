@@ -12,3 +12,7 @@
 
 
 <iframe src="static/pdf/Linux.pdf" width="100%" height="600px"></iframe>
+
+
+
+[点击查看 PDF](static/pdf/Linux.pdf)
