@@ -17,4 +17,11 @@
 
 
 
-<img src="https://cdn.742389.xyz/photos/iShot5.png" alt="图片预览" style="zoom:200%;" />
+[用onedrive查看 PDF](https://1drv.ms/b/c/53a8c629afe22f49/EVbqQ4G1K5VAnZXcpxockHkBUY3Nq80pSyz2aQFHOdWEyg?e=vOk07I)
+
+
+
+
+
+<img src="https://github.com/cherry384719/picx-images-hosting/raw/master/iShot_2025-08-05_18.40.16.6iklrq8phl.webp" style="width: 30%;"/>
+
