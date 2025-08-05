@@ -13,15 +13,23 @@
 
 
 
-[用cdn查看 PDF](https://cdn.742389.xyz/pdf/7.4在印度找路.pdf)
+1.   [用cdn查看 PDF](https://cdn.742389.xyz/pdf/7.4在印度找路.pdf)  
+
+ //电脑能在线查看，速度较快，手机必须下载后才能查看
 
 
 
-[用onedrive查看 PDF](https://1drv.ms/b/c/53a8c629afe22f49/EVbqQ4G1K5VAnZXcpxockHkBUY3Nq80pSyz2aQFHOdWEyg?e=vOk07I)
+
+
+2.   [用onedrive查看 PDF](https://1drv.ms/b/c/53a8c629afe22f49/EVbqQ4G1K5VAnZXcpxockHkBUY3Nq80pSyz2aQFHOdWEyg?e=vOk07I)  
+
+ //电脑、手机都能在线查看，但速度较慢
 
 
 
 
+
+3.   网站二维码：
 
 <img src="https://github.com/cherry384719/picx-images-hosting/raw/master/iShot_2025-08-05_18.40.16.6iklrq8phl.webp" style="width: 30%;"/>
 
