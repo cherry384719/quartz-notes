@@ -9,10 +9,18 @@
 
 
 
+测试pdf分享（无法预览，必须点击）和图片预览
+
+[本地查看 PDF](static/pdf/Linux.pdf)
+
+[用cdn查看 PDF](https://cdn.742389.xyz/pdf/7.4在印度找路.pdf)
 
 
-<iframe src="static/pdf/7.4在印度找路.pdf" width="100%" height="600px"></iframe>
 
 
 
-[点击查看 PDF](static/pdf/Linux.pdf)
+
+
+
+
+![图片预览](https://cdn.742389.xyz/photos/iShot1.png)
