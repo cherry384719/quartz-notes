@@ -7,8 +7,8 @@
     <script>
     function sayHello(){
 	    console.log('Hello!');
-         }
-     </script>
+	}
+    </script>
     ```
      
      >但是要注意，此时被包含在其中的js代码中就不能出现或输出`</script>`，防止浏览器报错,如果真的要输出这个字符串，可以使用转义字符，改为：`<\/script>`
