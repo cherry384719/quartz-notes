@@ -13,7 +13,7 @@
 
 
 
-1.   [用cdn查看 PDF](https://cdn.742389.xyz/pdf/7.4在印度找路.pdf)  
+1.   [用cdn查看 PDF](https://cdn.742389.xyz/pdf/Node.js实战_第2版.pdf)  
 
  //电脑能在线查看，速度较快，手机必须下载后才能查看
 
