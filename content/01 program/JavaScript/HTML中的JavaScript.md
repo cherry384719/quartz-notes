@@ -1,7 +1,7 @@
-### 如何将 JavaScript 引入网页
-#### **1.引用`<script>`元素**
+# 如何将 JavaScript 引入网页
+## **1.引用`<script>`元素**
 
-##### 	a.直接在网页`<script>`元素中嵌入JavaScript代码
+#### a.直接在网页`<script>`元素中嵌入JavaScript代码
 
 ```html
 <script>
@@ -15,7 +15,7 @@ function sayHello(){
 
 
 
-##### 	b.包含外部js文件（==更推荐==，利于代码维护和页面缓存）
+#### 	b.包含外部js文件（==更推荐==，利于代码维护和页面缓存）
 
 ```html
 <script src="example.js"></script>
@@ -29,7 +29,7 @@ function sayHello(){
 
 
 
-#### **2.将`<script>`元素放置在正确位置** 
+## **2.将`<script>`元素放置在正确位置** 
 
 一般将`<script>`放在`<body>`元素中的页面内容之后，例如：
 
