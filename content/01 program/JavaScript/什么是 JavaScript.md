@@ -6,4 +6,4 @@ JavaScript与Java在名字和语法上都很相似，但这两门编程语言从
 
 对于客户端来说，JavaScript通常被实现为一门解释语言，但如今它已经可以被即时编译（JIT）。随着HTML5和CSS3语言标准的推行，它还可以用于游戏、桌面和移动应用程序的开发，以及在服务器端网络环境运行（如Node.js）。
 
-[[HTML中的JavaScript|Next]]
+[[HTML中的JavaScript|下一篇：HTML中的Javascript]]
