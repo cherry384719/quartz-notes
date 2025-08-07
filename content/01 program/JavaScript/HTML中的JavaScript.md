@@ -21,7 +21,7 @@ function sayHello(){
 <script src="example.js"></script>
 <script src="https://www.example.com/main.js"></script>
 
-<!-->其中的example.js是外部js文件的路径，也可以是一个完整的URL<-->
+<!-- 这是测试 -->
 ```
 >按照惯例，外部 JavaScript 文件的扩展名是.js。这不是必需的，因为浏览器不会检 查所包含 JavaScript 文件的扩展名。这就为使用服务器端脚本语言动态生成 JavaScript 代 码，或者在浏览器中将 JavaScript 扩展语言（如 TypeScript，或 React 的 JSX）转译为 JavaScript 提供了可能性。不过要注意，服务器经常会根据文件扩展来确定响应的正确 MIME 类型。 如果不打算使用.js 扩展名，一定要确保服务器能返回正确的 MIME 类型。
 
