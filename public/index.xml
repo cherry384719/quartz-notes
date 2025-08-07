@@ -6,41 +6,23 @@
       <description>Last 10 notes on S+Zn</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>HTML中的JavaScript</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/HTML%E4%B8%AD%E7%9A%84JavaScript</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/HTML%E4%B8%AD%E7%9A%84JavaScript</guid>
+    <description><![CDATA[ 如何将 JavaScript 引入网页 1.引用&lt;script&gt;元素 a.直接在网页&lt;script&gt;元素中嵌入JavaScript代码 &lt;script&gt; function sayHello(){ console.log(&#039;Hello!&#039;); } &lt;/script&gt; 但是要注意，此时被包含在其中的js代码中就不能出现或输出&lt;/script&gt;，防止浏览器报错,如果真的要输出这个字符串，可以使用转义字符，改为：&lt;\/script&gt; b.包含外部js文件（更推荐，利于代码维护和页面缓存） &lt;script ... ]]></description>
+    <pubDate>Thu, 07 Aug 2025 02:58:26 GMT</pubDate>
+  </item><item>
+    <title>什么是 JavaScript</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E4%BB%80%E4%B9%88%E6%98%AF-JavaScript</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E4%BB%80%E4%B9%88%E6%98%AF-JavaScript</guid>
+    <description><![CDATA[ JavaScript（通常缩写为JS）是一门基于原型和头等函数的多范式高级解释型编程语言，它支持面向对象程序设计、指令式编程和函数式编程。它提供方法来操控文本、数组、日期以及正则表达式等。不支持I/O，比如网络、存储和图形等，但这些都可以由它的宿主环境提供支持。它由Ecma通过ECMAScript实现语言的标准化。目前，它被世界上的绝大多数网站所使用，也被世界主流浏览器（Chrome、Firefox、Safari和Opera）所支持。 JavaScript与Java在名字和语法上都很相似，但这两门编程语言从设计之初就有很大不同。JavaScript在语言设计上主要受到了Self（一种基于原型的... ]]></description>
+    <pubDate>Thu, 07 Aug 2025 02:40:21 GMT</pubDate>
+  </item><item>
     <title>index</title>
     <link>https://quartz.jzhao.xyz/</link>
     <guid>https://quartz.jzhao.xyz/</guid>
-    <description><![CDATA[  本笔记网站由github开源项目quartz搭建，部署于github pages上，仓库地址为：quartz-notes 目录： 1. ]]></description>
-    <pubDate>Tue, 05 Aug 2025 11:22:34 GMT</pubDate>
-  </item><item>
-    <title>test</title>
-    <link>https://quartz.jzhao.xyz/test</link>
-    <guid>https://quartz.jzhao.xyz/test</guid>
-    <description><![CDATA[ Markdown语法强大功能展示 📊 复杂数学公式展示 1. ]]></description>
-    <pubDate>Mon, 04 Aug 2025 04:16:04 GMT</pubDate>
-  </item><item>
-    <title>JavaScript</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript</guid>
-    <description><![CDATA[ 1.基础数据结构 Number String Object Transclude of 闭包#基础示例. ]]></description>
-    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
-  </item><item>
-    <title>异步编程</title>
-    <link>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B</link>
-    <guid>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B</guid>
-    <description><![CDATA[ JavaScript 异步编程深度解析：从事件循环到现代并发模型 补充内容点击此链接跳转 第一部分：单线程的困境与并发模型 1.1 同步与异步执行：核心冲突 从本质上讲，JavaScript 是一门同步、单线程的语言 1。这一基础设计选择对开发者如何编写代码以及应用程序的行为方式产生了深远的影响。要理解异步编程的必要性，必须首先把握纯同步模型的局限性。 同步编程规定代码按其出现的顺序，一次执行一行，顺序执行 1。每个操作都必须完全完成后，程序才能继续执行下一个操作。这通常被称为“阻塞”架构，因为一个耗时的任务会阻塞整个执行线程 4。一个贴切的比喻是打电话：一个人说话时，另一个人必须听着，并且听... ]]></description>
-    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
-  </item><item>
-    <title>异步编程——补充</title>
-    <link>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85</link>
-    <guid>https://quartz.jzhao.xyz/01-program/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E2%80%94%E2%80%94%E8%A1%A5%E5%85%85</guid>
-    <description><![CDATA[ JavaScript异步编程详解 - 定时器与Promise 什么是异步编程 同步 vs 异步 JavaScript是单线程语言，但通过异步编程可以处理耗时操作而不阻塞主线程。 // 同步代码 - 阻塞执行 console.log(&#039;1&#039;); console.log(&#039;2&#039;); console.log(&#039;3&#039;); // 输出: 1, 2, 3 (按顺序) // 异步代码 - 非阻塞执行 console.log(&#039;1&#039;); setTimeout(() =&gt; console.log(&#039;2&#039;),... ]]></description>
-    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
-  </item><item>
-    <title>闭包</title>
-    <link>https://quartz.jzhao.xyz/01-program/%E9%97%AD%E5%8C%85</link>
-    <guid>https://quartz.jzhao.xyz/01-program/%E9%97%AD%E5%8C%85</guid>
-    <description><![CDATA[ JavaScript 闭包详解笔记 什么是闭包？ 闭包（Closure）是JavaScript中一个重要且强大的概念。简单来说，闭包是指一个函数能够访问并操作其外部作用域中的变量，即使在其外部函数已经执行完毕之后。 核心特点 函数嵌套：内部函数引用外部函数的变量 变量持久化：外部函数执行完毕后，被引用的变量仍然存在 作用域链：内部函数可以访问外部函数的作用域 基础示例 示例1：最简单的闭包 function outerFunction(x) { // 这是外部函数的变量 let outerVariable = x; // 内部函数 function innerFunction(y) { // ... ]]></description>
-    <pubDate>Fri, 01 Aug 2025 13:39:34 GMT</pubDate>
+    <description><![CDATA[  本笔记网站由github开源项目quartz搭建，部署于github pages上，仓库地址为：quartz-notes 目录： 1. program Javascript 什么是 JavaScript HTML中的JavaScript . ]]></description>
+    <pubDate>Wed, 06 Aug 2025 10:42:38 GMT</pubDate>
   </item>
     </channel>
   </rss>
