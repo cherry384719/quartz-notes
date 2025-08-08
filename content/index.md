@@ -5,7 +5,7 @@
 - Javascript
     - [[什么是 JavaScript]]
     - [[HTML中的JavaScript]]
-
+    - [[index_语言基础|语言基础]]
 
 
 

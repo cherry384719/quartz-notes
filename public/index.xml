@@ -6,23 +6,65 @@
       <description>Last 10 notes on S+Zn</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
-    <title>HTML中的JavaScript</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/HTML%E4%B8%AD%E7%9A%84JavaScript</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/HTML%E4%B8%AD%E7%9A%84JavaScript</guid>
-    <description><![CDATA[ 如何将 JavaScript 引入网页 1.引用&lt;script&gt;元素 a.直接在网页&lt;script&gt;元素中嵌入JavaScript代码 &lt;script&gt; function sayHello(){ console.log(&#039;Hello!&#039;); } &lt;/script&gt; 但是要注意，此时被包含在其中的js代码中就不能出现或输出&lt;/script&gt;，防止浏览器报错,如果真的要输出这个字符串，可以使用转义字符，改为：&lt;\/script&gt; b.包含外部js文件（更推荐，利于代码维护和页面缓存） &lt;script ... ]]></description>
-    <pubDate>Thu, 07 Aug 2025 03:09:42 GMT</pubDate>
+    <title>let 声明</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/let-%E5%A3%B0%E6%98%8E</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/let-%E5%A3%B0%E6%98%8E</guid>
+    <description><![CDATA[ let与var作用差不多，但有重要的区别。最明显的是let声明的范围是块作用域，而var声明的范围是函数作用域。 if(true) { var name = &#039;Bob&#039;; console.log(name); // &#039;Bob&#039; } console.log(name); // &#039;Bob&#039; if(true) { let age = 26; console.log(age); // 26 } console.log(age); // 报错：age没有定义 这里的age无法在if块外部使用，是因为它的作用于就只是在代码块中，也就是{}中。块作... ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:22:38 GMT</pubDate>
+  </item><item>
+    <title>声明风格及最佳实践</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%A3%B0%E6%98%8E%E9%A3%8E%E6%A0%BC%E5%8F%8A%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%A3%B0%E6%98%8E%E9%A3%8E%E6%A0%BC%E5%8F%8A%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5</guid>
+    <description><![CDATA[ 1.不使用var 2.先const再let 下一篇：数据类型—— typeof 操作符. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:18:32 GMT</pubDate>
+  </item><item>
+    <title>const 声明</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/const-%E5%A3%B0%E6%98%8E</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/const-%E5%A3%B0%E6%98%8E</guid>
+    <description><![CDATA[ const与let基本相同，主要的区别是： const在声明变量时必须要初始化 变量的值在声明后不能修改 const age = 26; age = 33; // Error: 常量不能赋值 // 不允许重复声明 const name = &#039;Alice&#039;; const name = &#039;Bob&#039;; // Error! // 作用域也是块 const name = &#039;Bob&#039;; if(true) { const name = &#039;John&#039;; } console.log(name); // &#039;Bob&#039;... ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:17:02 GMT</pubDate>
+  </item><item>
+    <title>var 关键字</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/var-%E5%85%B3%E9%94%AE%E5%AD%97</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/var-%E5%85%B3%E9%94%AE%E5%AD%97</guid>
+    <description><![CDATA[ var 可以定义变量，类似C++中的int、bool等，比如： var message； 这行代码定义了一个变量message，可以用它来存储任意类型的值。（不初始化条件下，变量会保存一个特殊值undefined） 也可以在声明时就直接赋值： var message = &#039;hi&#039;; 此时message就成了一个保存字符串值&#039;hi&#039;的变量，然后可以改变保存的值，甚至可以直接改变值的类型： var message = &#039;hi&#039;; // 赋值变量为字符串型 message = 100; // 变为了number类型，合法，但不推荐 1. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:15:54 GMT</pubDate>
+  </item><item>
+    <title>关键字与保留字</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E4%BF%9D%E7%95%99%E5%AD%97</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E4%BF%9D%E7%95%99%E5%AD%97</guid>
+    <description><![CDATA[ ECMA-262 描述了一组保留的关键字，这些关键字有特殊用途，比如表示控制语句的开始和结束，或者执行特定的操作。按照规定，保留的关键字不能用作标识符或属性名。 ECMA-262 规定的所有关键字如下： await debugger finally break default for case do function catch else if class export import const extends in continue false instanceof new null return super switch this throw true try typeof var voi... ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:15:14 GMT</pubDate>
+  </item><item>
+    <title>语句</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E8%AF%AD%E5%8F%A5</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E8%AF%AD%E5%8F%A5</guid>
+    <description><![CDATA[ 分号 语句以分号结尾，但不是强制要求，一般可以省略分号，如： let sum = a + b //不加分号，一般系统会自动识别语句结束 let diff = a - b; //加分号更好，更推荐 加分号有助于预防一些意想不到的问题，比如代码压缩时可能导致语法错误，而且加分号有助于某些情况下提升性能。 多条语句 合并到一个C语言风格的代码块中，如： if(test){ test = false; console.log(test); } 下一篇： 关键字与保留字. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:14:19 GMT</pubDate>
+  </item><item>
+    <title>严格模式</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F</guid>
+    <description><![CDATA[ 严格模式是一种不同的 JavaScript 解析和执行模型，ECMAScript 3 的一些不规范写法在这种模式下会被处理，对于不安全的活动将抛出错误。 要对整个脚本启用严格模式，在脚本开头加上这一行：&quot;use strict&quot;，这是一个预处理指令，任何支持的 JavaScript 引擎看到它都会切换到严格模式。 也可以只在函数作用域中使用严格模式，只要将这个预处理指令放到函数体开头即可： function doSomething(){ &quot;use strict&quot; //函数体 } 严格模式会影响 JavaScript 执行的很多方面,所有现代浏览器都支持严格... ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:13:38 GMT</pubDate>
+  </item><item>
+    <title>标识符</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%A0%87%E8%AF%86%E7%AC%A6</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%A0%87%E8%AF%86%E7%AC%A6</guid>
+    <description><![CDATA[  标识符就是变量、函数或函数参数的名称。 命名规则： 第一个字符必须是字母、下划线或美元符号（$） 其他字符可以是字母、下划线、美元符号或数字 建议使用驼峰命名法，即第一个单词的字母小写，后面每个单词的首字母大写，如：firstSecond、myCar、doSomethingImportant。 注意：关键字、保留字、true、false 和 null 不能作为标识符。 下一篇： 严格模式. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 04:07:34 GMT</pubDate>
+  </item><item>
+    <title>index_语言基础</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/index_%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/index_%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80</guid>
+    <description><![CDATA[ 1. 语法 区分大小写 标识符 注释（与C语言相同） 严格模式 语句 2. 关键字与保留字 3. 变量 var 关键字 let 声明 const 声明 声明风格及最佳实践 4. ]]></description>
+    <pubDate>Thu, 07 Aug 2025 08:14:40 GMT</pubDate>
   </item><item>
     <title>什么是 JavaScript</title>
     <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E4%BB%80%E4%B9%88%E6%98%AF-JavaScript</link>
     <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E4%BB%80%E4%B9%88%E6%98%AF-JavaScript</guid>
     <description><![CDATA[ JavaScript（通常缩写为JS）是一门基于原型和头等函数的多范式高级解释型编程语言，它支持面向对象程序设计、指令式编程和函数式编程。它提供方法来操控文本、数组、日期以及正则表达式等。不支持I/O，比如网络、存储和图形等，但这些都可以由它的宿主环境提供支持。它由Ecma通过ECMAScript实现语言的标准化。目前，它被世界上的绝大多数网站所使用，也被世界主流浏览器（Chrome、Firefox、Safari和Opera）所支持。 JavaScript与Java在名字和语法上都很相似，但这两门编程语言从设计之初就有很大不同。JavaScript在语言设计上主要受到了Self（一种基于原型的... ]]></description>
-    <pubDate>Thu, 07 Aug 2025 02:40:21 GMT</pubDate>
-  </item><item>
-    <title>index</title>
-    <link>https://quartz.jzhao.xyz/</link>
-    <guid>https://quartz.jzhao.xyz/</guid>
-    <description><![CDATA[  本笔记网站由github开源项目quartz搭建，部署于github pages上，仓库地址为：quartz-notes 目录： 1. program Javascript 什么是 JavaScript HTML中的JavaScript . ]]></description>
-    <pubDate>Wed, 06 Aug 2025 10:42:38 GMT</pubDate>
+    <pubDate>Thu, 07 Aug 2025 03:30:14 GMT</pubDate>
   </item>
     </channel>
   </rss>

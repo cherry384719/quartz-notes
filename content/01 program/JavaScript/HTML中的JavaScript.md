@@ -48,3 +48,5 @@ function sayHello(){
 ```
 
 还有一些不常用的`<script>`标签，如`defer`、`async`、`<noscript>`，需要时查[MDN文档](https://developer.mozilla.org/zh-CN/docs/Web/HTML)
+
+[[index_语言基础|下一篇： 语言基础]]
