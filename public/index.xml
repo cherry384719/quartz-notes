@@ -6,65 +6,65 @@
       <description>Last 10 notes on S+Zn</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
-    <title>let 声明</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/let-%E5%A3%B0%E6%98%8E</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/let-%E5%A3%B0%E6%98%8E</guid>
-    <description><![CDATA[ let与var作用差不多，但有重要的区别。最明显的是let声明的范围是块作用域，而var声明的范围是函数作用域。 if(true) { var name = &#039;Bob&#039;; console.log(name); // &#039;Bob&#039; } console.log(name); // &#039;Bob&#039; if(true) { let age = 26; console.log(age); // 26 } console.log(age); // 报错：age没有定义 这里的age无法在if块外部使用，是因为它的作用于就只是在代码块中，也就是{}中。块作... ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:22:38 GMT</pubDate>
+    <title>Symbol 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Symbol-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Symbol-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ Symbol 是 ES6 引入的一种原始数据类型（primitive type），用于创建唯一的标识符。 一、基本概念 const sym1 = Symbol(); const sym2 = Symbol(); console.log(sym1 === sym2); // false Symbol() 每次调用都会生成一个唯一的值。 不可通过 new Symbol() 创建 —— 会抛出 TypeError。 二、使用场景 1. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 10:05:18 GMT</pubDate>
   </item><item>
-    <title>声明风格及最佳实践</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%A3%B0%E6%98%8E%E9%A3%8E%E6%A0%BC%E5%8F%8A%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%A3%B0%E6%98%8E%E9%A3%8E%E6%A0%BC%E5%8F%8A%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5</guid>
-    <description><![CDATA[ 1.不使用var 2.先const再let 下一篇：数据类型—— typeof 操作符. ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:18:32 GMT</pubDate>
+    <title>Object 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Object-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Object-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ 在 JavaScript 中，对象（Object）是一种复合数据类型，是所有复杂数据结构的基础。它是一个无序的键值对（key-value pair）集合，其中键是字符串或 Symbol，值可以是任何数据类型，包括其他对象。深入理解 Object 对于掌握 JavaScript至关重要。 1. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 10:00:33 GMT</pubDate>
   </item><item>
-    <title>const 声明</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/const-%E5%A3%B0%E6%98%8E</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/const-%E5%A3%B0%E6%98%8E</guid>
-    <description><![CDATA[ const与let基本相同，主要的区别是： const在声明变量时必须要初始化 变量的值在声明后不能修改 const age = 26; age = 33; // Error: 常量不能赋值 // 不允许重复声明 const name = &#039;Alice&#039;; const name = &#039;Bob&#039;; // Error! // 作用域也是块 const name = &#039;Bob&#039;; if(true) { const name = &#039;John&#039;; } console.log(name); // &#039;Bob&#039;... ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:17:02 GMT</pubDate>
+    <title>操作符</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%AC%A6</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%93%8D%E4%BD%9C%E7%AC%A6</guid>
+    <description><![CDATA[  ]]></description>
+    <pubDate>Fri, 08 Aug 2025 09:59:42 GMT</pubDate>
   </item><item>
-    <title>var 关键字</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/var-%E5%85%B3%E9%94%AE%E5%AD%97</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/var-%E5%85%B3%E9%94%AE%E5%AD%97</guid>
-    <description><![CDATA[ var 可以定义变量，类似C++中的int、bool等，比如： var message； 这行代码定义了一个变量message，可以用它来存储任意类型的值。（不初始化条件下，变量会保存一个特殊值undefined） 也可以在声明时就直接赋值： var message = &#039;hi&#039;; 此时message就成了一个保存字符串值&#039;hi&#039;的变量，然后可以改变保存的值，甚至可以直接改变值的类型： var message = &#039;hi&#039;; // 赋值变量为字符串型 message = 100; // 变为了number类型，合法，但不推荐 1. ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:15:54 GMT</pubDate>
+    <title>String 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/String-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/String-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ JavaScript 的 String 类型用于表示和操作一系列字符。 1. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 09:46:02 GMT</pubDate>
   </item><item>
-    <title>关键字与保留字</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E4%BF%9D%E7%95%99%E5%AD%97</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E4%BF%9D%E7%95%99%E5%AD%97</guid>
-    <description><![CDATA[ ECMA-262 描述了一组保留的关键字，这些关键字有特殊用途，比如表示控制语句的开始和结束，或者执行特定的操作。按照规定，保留的关键字不能用作标识符或属性名。 ECMA-262 规定的所有关键字如下： await debugger finally break default for case do function catch else if class export import const extends in continue false instanceof new null return super switch this throw true try typeof var voi... ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:15:14 GMT</pubDate>
+    <title>BigInt 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/BigInt-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/BigInt-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ BigInt 是一个数字原始类型，可以表示并安全地操作任意精度的整数，突破了 Number 类型的整数范围限制。 用途： 处理需要超出 Number.MAX_SAFE_INTEGER (2^53 - 1) 的大整数运算，例如高精度时间戳、大数据或加密算法中。 示例： // 在数字末尾加上 &#039;n&#039; 来创建 BigInt const veryLargeNumber = 90071992547409919007199254740991n; const result = veryLargeNumber * 2n; console.log(result); // 输出: 180143... ]]></description>
+    <pubDate>Fri, 08 Aug 2025 09:33:20 GMT</pubDate>
   </item><item>
-    <title>语句</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E8%AF%AD%E5%8F%A5</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E8%AF%AD%E5%8F%A5</guid>
-    <description><![CDATA[ 分号 语句以分号结尾，但不是强制要求，一般可以省略分号，如： let sum = a + b //不加分号，一般系统会自动识别语句结束 let diff = a - b; //加分号更好，更推荐 加分号有助于预防一些意想不到的问题，比如代码压缩时可能导致语法错误，而且加分号有助于某些情况下提升性能。 多条语句 合并到一个C语言风格的代码块中，如： if(test){ test = false; console.log(test); } 下一篇： 关键字与保留字. ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:14:19 GMT</pubDate>
+    <title>Number 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Number-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Number-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ 1. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 09:30:58 GMT</pubDate>
   </item><item>
-    <title>严格模式</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F</guid>
-    <description><![CDATA[ 严格模式是一种不同的 JavaScript 解析和执行模型，ECMAScript 3 的一些不规范写法在这种模式下会被处理，对于不安全的活动将抛出错误。 要对整个脚本启用严格模式，在脚本开头加上这一行：&quot;use strict&quot;，这是一个预处理指令，任何支持的 JavaScript 引擎看到它都会切换到严格模式。 也可以只在函数作用域中使用严格模式，只要将这个预处理指令放到函数体开头即可： function doSomething(){ &quot;use strict&quot; //函数体 } 严格模式会影响 JavaScript 执行的很多方面,所有现代浏览器都支持严格... ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:13:38 GMT</pubDate>
+    <title>Boolean 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Boolean-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Boolean-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ 1. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 09:21:24 GMT</pubDate>
   </item><item>
-    <title>标识符</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%A0%87%E8%AF%86%E7%AC%A6</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%A0%87%E8%AF%86%E7%AC%A6</guid>
-    <description><![CDATA[  标识符就是变量、函数或函数参数的名称。 命名规则： 第一个字符必须是字母、下划线或美元符号（$） 其他字符可以是字母、下划线、美元符号或数字 建议使用驼峰命名法，即第一个单词的字母小写，后面每个单词的首字母大写，如：firstSecond、myCar、doSomethingImportant。 注意：关键字、保留字、true、false 和 null 不能作为标识符。 下一篇： 严格模式. ]]></description>
-    <pubDate>Fri, 08 Aug 2025 04:07:34 GMT</pubDate>
+    <title>Null 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Null-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Null-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ null 类型只有一个值 null。它代表一个被开发者明确赋予的“空值”或“无对象”。 用途：作为变量的初始值，表示该变量未来将指向一个对象，但现在还没有；或者用于清空一个对象变量。 示例： let selectedUser = null; // 明确表示当前没有选中的用户 // .. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 09:00:58 GMT</pubDate>
   </item><item>
-    <title>index_语言基础</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/index_%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/index_%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80</guid>
-    <description><![CDATA[ 1. 语法 区分大小写 标识符 注释（与C语言相同） 严格模式 语句 2. 关键字与保留字 3. 变量 var 关键字 let 声明 const 声明 声明风格及最佳实践 4. ]]></description>
-    <pubDate>Thu, 07 Aug 2025 08:14:40 GMT</pubDate>
+    <title>Undefined 类型</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Undefined-%E7%B1%BB%E5%9E%8B</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Undefined-%E7%B1%BB%E5%9E%8B</guid>
+    <description><![CDATA[ undefined 类型只有一个值 undefined。它表示一个变量已被声明，但还从来没有被赋值。 出现场景: 一个变量被声明了但没有初始化（赋值）。 尝试访问一个对象上不存在的属性。 一个函数没有明确的 return 语句，或者 return 后面没有值。 示例： let user; console.log(user); // 输出: undefined const car = { brand: &#039;Toyota&#039; }; console.log(car.model); // 输出: undefined function doNothing() { // 没有 return... ]]></description>
+    <pubDate>Fri, 08 Aug 2025 08:58:16 GMT</pubDate>
   </item><item>
-    <title>什么是 JavaScript</title>
-    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E4%BB%80%E4%B9%88%E6%98%AF-JavaScript</link>
-    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E4%BB%80%E4%B9%88%E6%98%AF-JavaScript</guid>
-    <description><![CDATA[ JavaScript（通常缩写为JS）是一门基于原型和头等函数的多范式高级解释型编程语言，它支持面向对象程序设计、指令式编程和函数式编程。它提供方法来操控文本、数组、日期以及正则表达式等。不支持I/O，比如网络、存储和图形等，但这些都可以由它的宿主环境提供支持。它由Ecma通过ECMAScript实现语言的标准化。目前，它被世界上的绝大多数网站所使用，也被世界主流浏览器（Chrome、Firefox、Safari和Opera）所支持。 JavaScript与Java在名字和语法上都很相似，但这两门编程语言从设计之初就有很大不同。JavaScript在语言设计上主要受到了Self（一种基于原型的... ]]></description>
-    <pubDate>Thu, 07 Aug 2025 03:30:14 GMT</pubDate>
+    <title>typeof 操作符</title>
+    <link>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/typeof-%E6%93%8D%E4%BD%9C%E7%AC%A6</link>
+    <guid>https://quartz.jzhao.xyz/01-program/JavaScript/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/typeof-%E6%93%8D%E4%BD%9C%E7%AC%A6</guid>
+    <description><![CDATA[ 1. typeof 操作符概述 typeof 是 JavaScript 中的一个一元操作符，用于检测变量或表达式的数据类型。它返回一个表示操作数类型的字符串。 基本语法 typeof operand typeof(operand) // 括号是可选的 2. ]]></description>
+    <pubDate>Fri, 08 Aug 2025 08:56:46 GMT</pubDate>
   </item>
     </channel>
   </rss>
